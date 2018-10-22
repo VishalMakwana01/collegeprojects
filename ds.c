@@ -50,11 +50,11 @@ void displayFriends()
 
     for (i = 0; i < numbOfUsers; i++)
     {
-        printf("\n%s: ", users[i].name);
+        printf("\n\n\t\t%s: ", users[i].name);
         for (j = 0; j < numbOfUsers; j++)
         {
             if (relationMat[i][j] == 1)
-                printf("%s, ", users[j].name);
+                printf("\t%s ", users[j].name);
         }
     }
 }
@@ -79,7 +79,7 @@ void listAllUsers() //DFS traversal in order to display friends list
             {
                 push(u);
                 visited[i] = 1;
-                printf("%s, ", users[u].name);
+                printf("%s\t ", users[u].name);
                 u = i;
             }
         }
@@ -136,20 +136,23 @@ void fordelay(int j)
 }
 
 void menu()
-{   int choice,user1,friend1,friend2,c=1;
+{   int choice,user1,friend1,friend2,c=1,d,friend_counter=0;
     char name[20];
     system("cls");
     system("color 9");
-    printf("\n\n\t\t\t\tFRIEND MANAGEMENT");
+    printf("\n\n\t\t\t\tMINI FACEBOOK");
     printf("\n\n\n\t\t\t\xB2\xB2\xB2\xB2\xB2\xB2\xB2 WELCOME TO THE MAIN MENU \xB2\xB2\xB2\xB2\xB2\xB2\xB2");
-    printf("\n\n\t\t1.ADD USER\n\t\t2.ADD A FRIEND FOR A USER\n\t\t3.UNFRIEND\n\t\t4.SEE FRIENDS OF A USER\n\t\t5.CHECK MUTUAL FRIENDS\n\t\t6.Exit\n\n\n\n\n\t\t Enter your choice:");
+    printf("\n\n\t\t1.ADD USER\n\t\t2.ADD A FRIEND FOR A USER\n\t\t3.UNFRIEND\n\t\t4.SEE FRIENDS OF A USER\n\t\t5.CHECK MUTUAL FRIENDS\n\t\t6.List All Users\n\n\n\n\n\t\t Enter your choice:");
     scanf("%d",&choice);
-    if(choice==6)
+    if(choice==7)
         system("color 7");
     system("cls");
     switch(choice)
     {
-        case 1:printf("\n\n\t\tEnter name %d: ", numbOfUsers+1);
+        case 1:for(int i=0;i<numbOfUsers;i++){
+            printf("\n\t\t%d.%s\n",i+1,users[i].name);
+        }
+        printf("\n\n\t\tEnter name %d: ", numbOfUsers+1);
                scanf("%s",name);
                addUser(name);
                printf("\n\n\t\tAdding User");
@@ -164,7 +167,7 @@ void menu()
                menu();
         break;
         case 2:for(int i=0;i<numbOfUsers;i++){
-            printf("\n\n\t\t%d.%s\n",i+1,users[i].name);
+            printf("\n\t\t%d.%s\n",i+1,users[i].name);
         }
         printf("\n\n\t\tEnter the user you want to add friends for:");
         scanf("%d",&user1);
@@ -173,7 +176,7 @@ void menu()
             if(i==user1-1)
                 continue;
             else{
-            printf("\t\t\n\n%d.%s\n\n",i+1,users[i].name);
+            printf("\n\n\t\t%d.%s",i+1,users[i].name);
         }
         }
         do{
@@ -189,28 +192,37 @@ void menu()
         break;
         case 3:c=1;
         for(int i=0;i<numbOfUsers;i++){
-            printf("\t\t%d.%s\n",i+1,users[i].name);
+            printf("\n\t\t%d.%s",i+1,users[i].name);
         }
         printf("\n\n\t\tEnter the user you want to remove friends for:");
         scanf("%d",&user1);
         system("cls");
-        printf("\t\tBelow are the friends of %s\n\n",users[user1-1].name);
+        printf("\n\n\t\tBelow are the friends of %s\n",users[user1-1].name);
         for(int j=0;j<numbOfUsers;j++)
         {
             if(relationMat[user1-1][j]==1)
-            {
-                printf("\t\t%d.%s",j+1,users[j].name);
+            {   
+                printf("\n\t\t%d.%s",j+1,users[j].name);
             }
         }
          do{
-        printf("\n\n\t\tEnter the friends:");
+        printf("\n\n\t\tEnter the friend to remove:");
         scanf("%d",&friend1);
         unfriend(user1,friend1);
-        printf("\t\tDo you want to remove more friends ? (1/0)");
+        printf("\n\t\tDo you want to remove more friends ? (1/0)");
         scanf("%d",&c);
         }while(c!=0);
+        system("cls");
+        menu();
         break;
         case 4:displayFriends();
+                printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
+                scanf("%d",&d);
+                if(d==1)    
+                {
+                    system("cls");
+                    menu();
+                }
         break;
         case 5: for(int i=0;i<numbOfUsers;i++){
             printf("\n\n\t\t%d.%s\n",i+1,users[i].name);
@@ -218,8 +230,16 @@ void menu()
         printf("\n\n\t\tEnter the two users you want to check mutual friends for:");
         scanf("%d %d",&friend1,&friend2);
                 mutualFriend(friend1-1,friend2-1);
+        printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
+                scanf("%d",&d);
+                if(d==1)    
+                {
+                    system("cls");
+                    menu();
+                }
         break;
-
+        case 6:listAllUsers();
+        break;
     }
 }
 
@@ -233,7 +253,7 @@ char name[20];
     }
   system("cls");
     system("color 9");
-    printf("\n\n\t\t\t\tWELCOME");
+    printf("\n\n\n\t\t\t\t\tWELCOME");
     for(int i=0;i<=6;i++)
         {
             fordelay(100000000);
@@ -246,7 +266,7 @@ scanf("%d",&n);
 
 for (i = 0; i < n; i++)
     {
-        printf("Enter name %d: ", i + 1);
+        printf("\n\t\tEnter name %d: ", i + 1);
         scanf("%s",name);
         addUser(name);
     }
