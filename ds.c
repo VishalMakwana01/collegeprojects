@@ -65,6 +65,7 @@ void listAllUsers() //DFS traversal in order to display friends list
     int initial_node = 0;
     stackTop = -1;
     push(initial_node);
+    printf("\n\n\t\t");
     while (stackTop >= 0)
     {
         u = pop();
@@ -89,10 +90,12 @@ void listAllUsers() //DFS traversal in order to display friends list
 void addFriend(int user, int friend) //create relations graph.
 {
     if (user > 0 && friend > 0 && user <= MAX && friend <= MAX)
-       { relationMat[user - 1][friend - 1] = 1;
+       { if (relationMat[user - 1][friend - 1] == 1)
+            printf("They are already friends!");}
+
+      else { relationMat[user - 1][friend - 1] = 1;
     relationMat[friend - 1][user - 1] = 1;}
-    else
-        printf("Invalid input!");
+    
 }
 
 void unfriend(int user, int friend) //create relations graph.
@@ -239,6 +242,13 @@ void menu()
                 }
         break;
         case 6:listAllUsers();
+            printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
+                scanf("%d",&d);
+                if(d==1)    
+                {
+                    system("cls");
+                    menu();
+                }
         break;
     }
 }
@@ -260,6 +270,7 @@ char name[20];
             printf(".");
         }
                 system("cls");
+printf("\n\n\t\t\t\tMINI FACEBOOK");
 printf("\n\n\t\tENTER THE NUMBER OF USERS: ");
 scanf("%d",&n);
 
