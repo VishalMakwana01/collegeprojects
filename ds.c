@@ -11,7 +11,7 @@ typedef struct
 
 user users[MAX]; //user list
 int relationMat[MAX][MAX];
-int visited[MAX];
+int visited[MAX]={0};
 int stack[MAX];
 
 int numbOfUsers = 0;
@@ -47,7 +47,7 @@ void addUser(char _name[]) //add user to Users' database.
 void displayFriends()
 {
     int i = 0, j = 0;
-
+    printf("\n\n\t\tUsers\t\tFriends");
     for (i = 0; i < numbOfUsers; i++)
     {
         printf("\n\n\t\t%s: ", users[i].name);
@@ -63,24 +63,25 @@ void listAllUsers() //DFS traversal in order to display friends list
 {
     int u, i;
     int initial_node = 0;
-    stackTop = -1;
+    
     push(initial_node);
     printf("\n\n\t\t");
+    for(i=0;i<numbOfUsers;i++)
+    {
+        visited[i]=0;
+    }
+    printf("%s",users[0].name);
     while (stackTop >= 0)
     {
         u = pop();
-        if (visited[u] == 0)
-        {
-            printf("%s, ", users[u].name);
-            visited[u] = 1;
-        }
-        for (i = 1; i <= numbOfUsers; i++)
+        
+        for (i = 0; i <numbOfUsers; i++)
         {
             if ((relationMat[u][i] == 1) && (visited[i] == 0))
             {
                 push(u);
                 visited[i] = 1;
-                printf("%s\t ", users[u].name);
+                printf("%s\t ", users[i].name);
                 u = i;
             }
         }
@@ -90,10 +91,8 @@ void listAllUsers() //DFS traversal in order to display friends list
 void addFriend(int user, int friend) //create relations graph.
 {
     if (user > 0 && friend > 0 && user <= MAX && friend <= MAX)
-       { if (relationMat[user - 1][friend - 1] == 1)
-            printf("They are already friends!");}
-
-      else { relationMat[user - 1][friend - 1] = 1;
+       
+      { relationMat[user - 1][friend - 1] = 1;
     relationMat[friend - 1][user - 1] = 1;}
     
 }
@@ -139,7 +138,7 @@ void fordelay(int j)
 }
 
 void menu()
-{   int choice,user1,friend1,friend2,c=1,d,friend_counter=0;
+{   int choice,user1,friend1,friend2,c=1,d,count=0,count1=0;
     char name[20];
     system("cls");
     system("color 9");
@@ -170,28 +169,53 @@ void menu()
                menu();
         break;
         case 2:for(int i=0;i<numbOfUsers;i++){
-            printf("\n\t\t%d.%s\n",i+1,users[i].name);
+            printf("\n\n\t\t%d.%s",i+1,users[i].name);
         }
         printf("\n\n\t\tEnter the user you want to add friends for:");
         scanf("%d",&user1);
         system("cls");
-        for(int i=0;i<numbOfUsers;i++){
-            if(i==user1-1)
-                continue;
-            else{
-            printf("\n\n\t\t%d.%s",i+1,users[i].name);
-        }
+        for(int j=0;j<numbOfUsers;j++)
+        {
+            if(relationMat[user1-1][j]==0 && (user1-1)!=j)
+            {   
+                count1++;
+            }
         }
         do{
+        if(count1!=0){
+        for(int j=0;j<numbOfUsers;j++)
+        {
+            if(relationMat[user1-1][j]==0 && (user1-1)!=j)
+            {   
+                printf("\n\t\t%d.%s",j+1,users[j].name);
+            }
+        }
+        
         printf("\n\n\t\tEnter the friends:");
         scanf("%d",&friend1);
         addFriend(user1,friend1);
+        count1--;
         printf("\n\n\t\t%s is now friends with %s",users[user1-1].name,users[friend1-1].name);
-        printf("\n\n\t\tDo you want to add more friends ? (1/0)");
+        if(count1!=0)
+        {printf("\n\n\t\tDo you want to add more friends ? (1/0)");
         scanf("%d",&c);
-        }while(c!=0);
-        system("cls");
-        menu();
+        system("cls");}
+        else
+            break;
+        }}while(c!=0);
+        if(count1==0)
+        {
+        printf("\n\n\t\t%s has no friends to add now.",users[user1-1].name);
+        printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
+                scanf("%d",&d);
+                if(d==1)    
+                {
+                    system("cls");
+                    menu();
+                }
+    }
+
+        
         break;
         case 3:c=1;
         for(int i=0;i<numbOfUsers;i++){
@@ -200,7 +224,16 @@ void menu()
         printf("\n\n\t\tEnter the user you want to remove friends for:");
         scanf("%d",&user1);
         system("cls");
-        printf("\n\n\t\tBelow are the friends of %s\n",users[user1-1].name);
+        for (int j = 0; j < numbOfUsers; j++)
+        {
+            if (relationMat[user1 - 1][j] == 1)
+            {
+                count++;
+                }
+        }
+        do{
+        if(count!=0)
+        {printf("\n\n\t\tBelow are the friends of %s\n",users[user1-1].name);
         for(int j=0;j<numbOfUsers;j++)
         {
             if(relationMat[user1-1][j]==1)
@@ -208,15 +241,29 @@ void menu()
                 printf("\n\t\t%d.%s",j+1,users[j].name);
             }
         }
-         do{
         printf("\n\n\t\tEnter the friend to remove:");
         scanf("%d",&friend1);
         unfriend(user1,friend1);
-        printf("\n\t\tDo you want to remove more friends ? (1/0)");
+        count--;
+        if(count!=0)
+        {printf("\n\t\tDo you want to remove more friends ? (1/0)");
         scanf("%d",&c);
-        }while(c!=0);
-        system("cls");
-        menu();
+        system("cls");}
+        else
+            break;
+        }}while(c!=0);
+        
+    
+    if(count==0){
+        printf("\n\n\t\t%s has no friends.",users[user1-1].name);
+        printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
+                scanf("%d",&d);
+                if(d==1)    
+                {
+                    system("cls");
+                    menu();
+                }
+    }
         break;
         case 4:displayFriends();
                 printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
