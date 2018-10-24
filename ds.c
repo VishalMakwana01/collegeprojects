@@ -165,7 +165,7 @@ void menu()
         {
             if(relationMat[user1-1][j]==0 && (user1-1)!=j)
             {
-                printf("\n\t\t%d.%s",j+1,users[j].name);
+                printf("\n\n\t\t%d.%s",j+1,users[j].name);
             }
         }
 
@@ -175,11 +175,8 @@ void menu()
         count1--;
         printf("\n\n\t\t%s is now friends with %s",users[user1-1].name,users[friend1-1].name);
 }
-        if(count1!=0)
-        {printf("\n\n\t\tDo you want to add more friends ? (1/0)");
-        scanf("%d",&c);
-        system("cls");}
-        else if(count1==0)
+        
+        if(count1==0)
         {
         printf("\n\n\t\t%s has no friends to add now.",users[user1-1].name);
         printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
@@ -189,7 +186,16 @@ void menu()
                     system("cls");
                     menu();
                 }
-    }}while(c!=0);
+                else{
+                    exit(1);
+                    break;
+                }
+    }
+    else  if(count1!=0)
+        {printf("\n\n\t\tDo you want to add more friends ? (1/0): ");
+        scanf("%d",&c);
+        system("cls");}
+}while(c!=0);
 	menu();
 
 
@@ -223,15 +229,10 @@ void menu()
         unfriend(user1,friend1);
         count--;
         if(count!=0)
-        {printf("\n\t\tDo you want to remove more friends ? (1/0)");
+        {printf("\n\t\tDo you want to remove more friends ? (1/0): ");
         scanf("%d",&c);
         system("cls");}
-        else
-            break;
-        }}while(c!=0);
-
-
-    if(count==0){
+    else if(count==0){
         printf("\n\n\t\t%s has no friends.",users[user1-1].name);
         printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
                 scanf("%d",&d);
@@ -240,7 +241,11 @@ void menu()
                     system("cls");
                     menu();
                 }
-    }
+                else{
+                    exit(1);
+                }
+    }}}while(c!=0);
+    menu();
         break;
         case 4:displayFriends();
                 printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
@@ -250,12 +255,17 @@ void menu()
                     system("cls");
                     menu();
                 }
+                else{
+                    exit(1);
+                }
         break;
         case 5: for(int i=0;i<numbOfUsers;i++){
             printf("\n\n\t\t%d.%s\n",i+1,users[i].name);
         }
         printf("\n\n\t\tEnter the two users you want to check mutual friends for:");
-        scanf("%d %d",&friend1,&friend2);
+        scanf("%d",&friend1);
+        printf("\t\t");
+        scanf("%d",&friend2);
                 mutualFriend(friend1-1,friend2-1);
         printf("\n\n\t\tEnter 1 to go back to Main Menu or 0 to exit:");
                 scanf("%d",&d);
